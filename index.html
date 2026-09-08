@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive simulated timeline celebrating 30 years of Liberty & Society.">
+  <meta name="theme-color" content="#0b352e">
+  <title>30 Years of Liberty & Society</title>
+  <style>
+    :root {
+      --forest: #00685f;
+      --forest-2: #185a3b;
+      --cream: #ffffff;
+      --paper: #ffffff;
+      --coral: #00685f;
+      --gold: #185a3b;
+      --ink: #171717;
+      --muted: #555555;
+      --line: #e1e1e1;
+      --shadow: 0 18px 50px rgba(0, 55, 49, .09);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
+
+    header {
+      padding: 28px clamp(20px, 5vw, 74px) 68px;
+      color: var(--ink);
+      background: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+    header::after {
+      content: "30";
+      position: absolute;
+      right: -1rem;
+      bottom: -7rem;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,104,95,.08);
+      font: 500 clamp(12rem, 30vw, 26rem)/.8 Georgia, serif;
+      pointer-events: none;
+    }
+    nav, .hero, main { max-width: 1460px; margin-inline: auto; }
+    nav { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 750; }
+    .brand { color: var(--forest); }
+    .brand-mark { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--forest); border-radius: 50%; font: 700 17px Georgia, serif; }
+    .synthetic-badge { border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .hero { padding-top: clamp(70px, 10vw, 130px); position: relative; z-index: 1; }
+    .kicker { margin: 0 0 18px; color: var(--forest); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; max-width: 980px; color: var(--forest); font: 600 clamp(3.2rem, 7vw, 7.2rem)/.9 Georgia, "Times New Roman", serif; letter-spacing: -.065em; }
+    .intro { margin: 25px 0 0; max-width: 690px; color: var(--muted); font-size: clamp(16px, 1.6vw, 21px); line-height: 1.55; }
+    .hero::after { content: ""; display: block; width: 100%; height: 18px; margin-top: 46px; border-radius: 18px 0 18px 0; background: var(--forest); }
+
+    main { padding: 76px clamp(16px, 5vw, 74px) 100px; }
+    .timeline-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 46px; }
+    .timeline-heading h2 { margin: 0; font: 500 clamp(2rem, 3.6vw, 3.7rem)/1 Georgia, serif; letter-spacing: -.04em; }
+    .timeline-heading p { margin: 0; max-width: 460px; color: var(--muted); line-height: 1.5; }
+
+    .timeline-shell {
+      position: relative;
+      padding: 76px 20px 68px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    .timeline {
+      position: relative;
+      min-width: 1120px;
+      height: 78px;
+      display: grid;
+      grid-template-columns: repeat(31, 1fr);
+      align-items: center;
+      padding: 0 18px;
+    }
+    .timeline-note { margin: 36px 18px 0; color: var(--muted); font-size: 11px; text-align: right; }
+    .double-key { display: inline-grid; grid-template-columns: repeat(2, 7px); gap: 2px; margin-right: 6px; vertical-align: 1px; }
+    .double-key i { width: 7px; height: 7px; border: 1px solid var(--forest); border-radius: 50%; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 35px;
+      right: 35px;
+      top: 50%;
+      height: 2px;
+      transform: translateY(-50%);
+      background: var(--forest);
+    }
+    .year-node {
+      appearance: none;
+      width: 100%;
+      height: 72px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+    .year-node::before {
+      content: "";
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 2px solid var(--forest-2);
+      transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .year-node:hover::before,
+    .year-node:focus-visible::before {
+      transform: scale(1.55);
+      background: var(--gold);
+      box-shadow: 0 0 0 5px rgba(220,169,65,.16);
+    }
+    .year-node.active::before {
+      transform: scale(1.7);
+      border-color: var(--coral);
+      background: var(--coral);
+      box-shadow: 0 0 0 6px rgba(238,112,92,.15);
+    }
+    .year-node.double::after {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 2px solid var(--forest);
+      transform: translate(8px, -8px);
+    }
+    .year-node.double.active::after { background: var(--forest-2); }
+    .year-label {
+      position: absolute;
+      top: 55px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-48deg);
+      transform-origin: top left;
+      color: var(--muted);
+      font-size: 10px;
+      transition: color .18s ease;
+    }
+    .year-node.active .year-label { color: var(--coral); font-weight: 800; }
+    .year-node:nth-child(5n + 1) .year-label,
+    .year-node:first-child .year-label,
+    .year-node:last-child .year-label { font-size: 12px; color: var(--ink); }
+
+    .hover-card {
+      position: fixed;
+      z-index: 50;
+      width: 210px;
+      padding: 13px 15px;
+      color: white;
+      background: var(--forest);
+      border-radius: 12px;
+      box-shadow: 0 14px 34px rgba(0,0,0,.2);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -100%) translateY(-12px);
+      transition: opacity .12s ease;
+    }
+    .hover-card.show { opacity: 1; }
+    .hover-card strong { display: block; font: 500 23px Georgia, serif; }
+    .hover-card span { display: block; margin-top: 4px; color: rgba(255,255,255,.7); font-size: 11px; line-height: 1.4; }
+
+    .detail-tab {
+      display: none;
+      margin-top: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .detail-tab.open { display: block; animation: reveal .28s ease both; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-accent { height: 5px; background: var(--forest); }
+    .detail-inner { padding: clamp(24px, 4vw, 54px); }
+    .detail-head { display: grid; grid-template-columns: 230px minmax(0, 1fr) auto; gap: 40px; align-items: start; }
+    .big-year { font: 500 clamp(4.6rem, 9vw, 8.5rem)/.75 Georgia, serif; color: var(--forest); letter-spacing: -.07em; }
+    .edition-label { display: inline-block; margin-top: 20px; padding: 7px 10px; color: var(--forest); background: #edf5f3; border-radius: 4px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .detail-copy h3 { margin: 0 0 12px; font: 500 clamp(2rem, 3.4vw, 3.4rem)/1 Georgia, serif; letter-spacing: -.04em; }
+    .detail-copy p { max-width: 700px; margin: 0; color: var(--muted); line-height: 1.65; }
+    .question { margin-top: 22px !important; padding-left: 16px; border-left: 3px solid var(--gold); color: var(--ink) !important; font: italic 18px/1.5 Georgia, serif; }
+    .close-tab { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; font-size: 20px; }
+    .close-tab:hover { border-color: var(--coral); color: var(--coral); }
+    .cohort-picker { margin: 34px 0 0 270px; padding: 17px; background: #f6f7f7; border: 1px solid var(--line); border-radius: 10px; }
+    .cohort-picker strong { display: block; margin-bottom: 10px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .cohort-options { display: flex; gap: 8px; }
+    .cohort-option { min-width: 130px; padding: 11px 16px; border: 1px solid var(--forest); border-radius: 5px; background: white; color: var(--forest); cursor: pointer; font-weight: 750; }
+    .cohort-option.active, .cohort-option:hover { color: white; background: var(--forest-2); border-color: var(--forest-2); }
+
+    .tab-switcher { margin-top: 42px; display: flex; gap: 7px; border-bottom: 1px solid var(--line); }
+    .tab-button { border: 0; border-bottom: 3px solid transparent; background: transparent; padding: 12px 16px; cursor: pointer; color: var(--muted); font-weight: 700; }
+    .tab-button.active { color: var(--ink); border-bottom-color: var(--coral); }
+    .tab-panel { padding-top: 24px; }
+    .people-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+    .person { min-width: 0; padding: 10px; border: 1px solid var(--line); border-radius: 13px; background: white; text-align: left; cursor: pointer; }
+    .person:hover { border-color: var(--forest); box-shadow: 0 8px 20px rgba(0,55,49,.08); }
+    .person strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+    .person span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+    .portrait { width: 100%; aspect-ratio: 1; margin-bottom: 11px; border-radius: 9px; background-image: var(--atlas); background-size: 800% 800%; background-position: var(--x) var(--y); background-repeat: no-repeat; }
+    .field-dot { width: 7px; height: 7px; display: inline-block !important; margin: 0 5px 1px 0 !important; border-radius: 50%; background: var(--dot); }
+    .speaker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .speaker { padding: 12px; color: white; background: var(--forest); border: 0; border-radius: 15px; text-align: left; cursor: pointer; }
+    .speaker:hover { background: var(--forest-2); transform: translateY(-2px); }
+    .speaker .portrait { margin-bottom: 14px; }
+    .speaker-index { color: var(--gold); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .speaker strong { display: block; margin-top: 22px; font: 500 21px Georgia, serif; }
+    .speaker span { display: block; margin-top: 5px; color: rgba(255,255,255,.63); font-size: 11px; line-height: 1.4; }
+    .speaker p { margin: 16px 0 0; color: rgba(255,255,255,.86); font-size: 13px; line-height: 1.45; }
+    .disclaimer { margin-top: 20px; color: var(--muted); font-size: 11px; }
+
+    .profile-dialog { width: min(760px, calc(100% - 28px)); padding: 0; border: 0; border-radius: 16px; box-shadow: 0 28px 90px rgba(0,0,0,.28); }
+    .profile-dialog::backdrop { background: rgba(0,35,31,.55); backdrop-filter: blur(3px); }
+    .profile-layout { display: grid; grid-template-columns: 230px 1fr; }
+    .profile-visual { padding: 26px; color: white; background: var(--forest); }
+    .profile-visual .portrait { margin: 0; border-radius: 12px; }
+    .profile-visual span { display: block; margin-top: 16px; color: rgba(255,255,255,.7); font-size: 11px; }
+    .profile-copy { position: relative; padding: 34px; }
+    .profile-copy h3 { margin: 0; color: var(--forest); font-size: 30px; }
+    .profile-role { margin: 8px 42px 0 0; font-weight: 800; line-height: 1.4; }
+    .profile-meta { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .profile-bio { margin: 25px 0 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); line-height: 1.65; }
+    .profile-close { position: absolute; right: 18px; top: 18px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; font-size: 19px; }
+    .profile-close:hover { color: white; background: var(--forest); }
+
+    footer { max-width: 1460px; margin: auto; padding: 0 clamp(20px, 5vw, 74px) 44px; color: var(--muted); font-size: 11px; }
+
+    @media (max-width: 900px) {
+      .detail-head { grid-template-columns: 1fr auto; }
+      .detail-copy { grid-column: 1 / -1; grid-row: 2; }
+      .cohort-picker { margin-left: 0; }
+      .people-grid { grid-template-columns: repeat(3, 1fr); }
+      .speaker-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      header { padding-bottom: 52px; }
+      .synthetic-badge { display: none; }
+      .timeline-heading { display: block; }
+      .timeline-heading p { margin-top: 12px; }
+      .timeline-shell { border-radius: 18px; padding-inline: 4px; }
+      .detail-inner { padding: 25px 18px; }
+      .people-grid { grid-template-columns: repeat(2, 1fr); }
+      .speaker-grid { grid-template-columns: 1fr; }
+      .profile-layout { grid-template-columns: 1fr; }
+      .profile-visual { display: grid; grid-template-columns: 120px 1fr; gap: 18px; align-items: end; }
+      .profile-visual span { margin: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+
+    /* Vertical comparison mode. The default page remains horizontal. */
+    body.vertical-layout .timeline-shell { overflow: visible; padding: 36px 24px; }
+    body.vertical-layout .timeline {
+      min-width: 0;
+      height: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      padding: 8px 0;
+    }
+    body.vertical-layout .timeline::before {
+      left: 75px;
+      right: auto;
+      top: 26px;
+      bottom: 26px;
+      width: 2px;
+      height: auto;
+      transform: none;
+    }
+    body.vertical-layout .year-node {
+      width: 100%;
+      height: 52px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 70px;
+    }
+    body.vertical-layout .year-node::before { position: relative; flex: 0 0 auto; }
+    body.vertical-layout .year-node.double::after {
+      left: 79px;
+      top: 13px;
+      transform: none;
+    }
+    body.vertical-layout .year-label,
+    body.vertical-layout .year-node:nth-child(5n + 1) .year-label,
+    body.vertical-layout .year-node:first-child .year-label,
+    body.vertical-layout .year-node:last-child .year-label {
+      position: static;
+      transform: none;
+      margin-left: 26px;
+      color: var(--ink);
+      font-size: 14px;
+    }
+    body.vertical-layout .year-node.double .year-label::after {
+      content: "May + September";
+      margin-left: 12px;
+      padding: 4px 7px;
+      color: var(--forest);
+      background: #edf5f3;
+      border-radius: 3px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    body.vertical-layout .timeline-note { max-width: 270px; margin: 22px 0 0 102px; text-align: left; }
+  </style>
+  <link rel="stylesheet" href="refinement.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="brand"><span class="brand-mark">L&amp;S</span><span>Liberty &amp; Society</span></div>
+      <span class="synthetic-badge">Interactive concept · Simulated data</span>
+    </nav>
+    <div class="hero">
+      <p class="kicker">1996—2026 · 30 years</p>
+      <h1>Thirty years.<br>Countless conversations.</h1>
+      <p class="intro">Explore the people and ideas of Liberty &amp; Society, one cohort at a time.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="timeline-heading">
+      <h2>The anniversary timeline</h2>
+      <div class="timeline-controls"><p>Choose a year. Meet the people.</p><div class="layout-picker" aria-label="Timeline orientation"><button type="button" id="horizontalView" aria-pressed="true">Horizontal</button><button type="button" id="verticalView" aria-pressed="false">Vertical</button></div></div>
+    </div>
+
+    <section class="timeline-shell" aria-label="Conference timeline">
+      <div class="timeline" id="timeline" role="group" aria-label="Conference years"></div>
+      <p class="timeline-note"><span class="double-key" aria-hidden="true"><i></i><i></i></span>Double marker = May and September cohorts</p>
+    </section>
+
+    <section class="detail-tab" id="detailTab" aria-live="polite" aria-label="Selected year details">
+      <div class="tab-accent"></div>
+      <div class="detail-inner">
+        <div class="detail-head">
+          <div><div class="big-year" id="selectedYear"></div><span class="edition-label" id="selectedMonth"></span></div>
+          <div class="detail-copy">
+            <h3 id="selectedTheme"></h3>
+            <p id="selectedSummary"></p>
+            <p class="question" id="selectedQuestion"></p>
+          </div>
+          <button class="close-tab" id="closeTab" type="button" aria-label="Close year details">×</button>
+        </div>
+
+        <div class="cohort-picker" id="cohortPicker" hidden>
+          <strong>This year held two conferences — choose a cohort</strong>
+          <div class="cohort-options" id="cohortOptions"></div>
+        </div>
+
+        <div class="tab-switcher" role="tablist" aria-label="Year record type">
+          <button class="tab-button active" id="attendeeTab" type="button" role="tab" aria-selected="true" aria-controls="attendeePanel">30 attendees</button>
+          <button class="tab-button" id="speakerTab" type="button" role="tab" aria-selected="false" aria-controls="speakerPanel">4 speakers</button>
+        </div>
+        <div class="tab-panel" id="attendeePanel" role="tabpanel" aria-labelledby="attendeeTab"></div>
+        <div class="tab-panel" id="speakerPanel" role="tabpanel" aria-labelledby="speakerTab" hidden></div>
+        <p class="disclaimer">All names, institutions, fields, themes and sessions shown here are fictional and generated for this prototype.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="hover-card" id="hoverCard" role="tooltip"><strong id="hoverYear"></strong><span id="hoverTheme"></span></div>
+  <dialog class="profile-dialog" id="profileDialog" aria-labelledby="profileName">
+    <div class="profile-layout">
+      <div class="profile-visual"><div class="portrait" id="profilePortrait"></div><span id="profileConference"></span></div>
+      <div class="profile-copy">
+        <button class="profile-close" id="profileClose" type="button" aria-label="Close profile">×</button>
+        <h3 id="profileName"></h3>
+        <p class="profile-role" id="profileRole"></p>
+        <p class="profile-meta" id="profileMeta"></p>
+        <p class="profile-bio" id="profileBio"></p>
+      </div>
+    </div>
+  </dialog>
+  <footer>1996–2026 inclusive · 36 simulated cohorts · 1,080 attendees · 144 speakers. Five years contain May and September conferences.</footer>
+
+  <script src="embed.js"></script>
+  <script src="portrait-data.js"></script>
+  <script>
+    let verticalLayout = new URLSearchParams(window.location.search).get("layout") === "vertical";
+    if (verticalLayout) {
+      document.body.classList.add("vertical-layout");
+      document.title = "30 Years of Liberty & Society — Vertical Timeline";
+    }
+    if (window.PORTRAIT_ATLAS) document.documentElement.style.setProperty("--atlas", `url("${window.PORTRAIT_ATLAS}")`);
+
+    const START = 1996;
+    const END = 2026;
+    const years = Array.from({ length: END - START + 1 }, (_, i) => START + i);
+    const firstNames = ["Aisha","Alexander","Amelia","Anika","Benjamin","Callum","Charlotte","Chloe","Daniel","Eleanor","Eliza","Ethan","Gabriel","Grace","Harper","Hugo","Imogen","Isaac","Isla","Jack","Jade","Jasper","Josephine","Kai","Lachlan","Leila","Leo","Lily","Lucas","Maddison","Maeve","Marcus","Maya","Mia","Nathan","Nina","Noah","Oliver","Priya","Rafael","Ruby","Samantha","Samuel","Sienna","Sophie","Theo","Thomas","William","Yasmin","Zoe"];
+    const lastNames = ["Adams","Bennett","Campbell","Chen","Clarke","Davis","Edwards","Evans","Foster","Fraser","Gibson","Grant","Green","Hall","Harris","Henderson","Hughes","Jackson","Kaur","Kelly","Kennedy","Kim","Lee","Lewis","Lim","Martin","McKenzie","Mitchell","Morgan","Murray","Nguyen","O'Connor","Patel","Reid","Roberts","Robinson","Ryan","Singh","Smith","Taylor","Thomas","Thompson","Walker","Ward","White","Williams","Wilson","Wong","Young"];
+    const institutions = ["Australian National University","University of Sydney","Monash University","University of Melbourne","University of Queensland","University of Auckland","University of Otago","University of Adelaide","University of Tasmania","University of Western Australia","Macquarie University","UNSW Sydney","Griffith University","Victoria University of Wellington"];
+    const fields = ["Economics","Law","Politics","Philosophy","Public Policy","History","Commerce","International Relations"];
+    const fieldColors = { Economics: "#00685f", Law: "#185a3b", Politics: "#258176", Philosophy: "#5a8d7b", "Public Policy": "#7a7a7a", History: "#9a9a9a", Commerce: "#3c6e58", "International Relations": "#4d7f75" };
+    const themes = [
+      ["The architecture of freedom","How do institutions preserve liberty?"],
+      ["Markets, morals & modernity","Can prosperity and virtue reinforce one another?"],
+      ["Rights in the digital age","Who should set the rules of a connected society?"],
+      ["The limits of power","What makes government action legitimate?"],
+      ["Pluralism under pressure","How can disagreement strengthen a free society?"],
+      ["Opportunity by design","Which barriers keep people from flourishing?"],
+      ["Ideas across borders","What can Australia and New Zealand learn from each other?"],
+      ["Freedom in a changing world","What must liberal societies renew for the next generation?"]
+    ];
+    const speakerTitles = ["Economist","Legal scholar","Political philosopher","Policy researcher","Historian","Journalist","Civic entrepreneur","Social scientist"];
+    const sessionStarts = ["Rethinking","In defence of","The future of","A case for","Beyond","The hidden logic of","Rebuilding"];
+    const sessionEnds = ["open markets","civil society","free speech","democratic trust","limited government","regulatory reform","individual agency","institutional resilience","the rule of law","public choice"];
+    const currentRoles = ["Policy Director","Senior Economist","Barrister","University Lecturer","Strategy Consultant","Public Affairs Manager","Research Fellow","Technology Founder","Government Adviser","Journalist","Community Partnerships Lead","Regulatory Analyst","Chief of Staff","Program Director","Commercial Lawyer","Data Policy Specialist"];
+    const currentOrganisations = ["Civic Futures Institute","Southern Cross Advisory","Open Markets Council","Harbour Policy Lab","Australasian Policy Forum","Meridian Economics","Common Ground Foundation","Parliamentary Research Service","Frontier Strategy Group","Public Ideas Network","Federation Chambers","Tasman Innovation Lab"];
+    const currentCities = ["Sydney","Melbourne","Canberra","Brisbane","Perth","Adelaide","Hobart","Auckland","Wellington","Christchurch","London","Singapore"];
+
+    function hash(seed) {
+      let h = 2166136261;
+      for (let i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+      return h >>> 0;
+    }
+    const pick = (list, seed) => list[hash(seed) % list.length];
+    const portraitStyle = name => {
+      const cell = hash(name) % 64;
+      const x = (cell % 8) * (100 / 7);
+      const y = Math.floor(cell / 8) * (100 / 7);
+      return `--x:${x.toFixed(3)}%;--y:${y.toFixed(3)}%`;
+    };
+    const doubleYears = new Set([1999, 2004, 2010, 2017, 2023]);
+    const nameFor = (year, month, index, role) => {
+      const editionOffset = month === "September" ? 29 : 0;
+      return `${firstNames[(year * 7 + index * 11 + editionOffset + (role === "speaker" ? 17 : 0)) % firstNames.length]} ${lastNames[(year * 13 + index * 17 + editionOffset + (role === "speaker" ? 23 : 0)) % lastNames.length]}`;
+    };
+
+    const cohorts = years.flatMap(year => {
+      const months = doubleYears.has(year) ? ["May", "September"] : ["May"];
+      return months.map((month, editionIndex) => {
+        const theme = themes[(year - START + editionIndex * 3) % themes.length];
+        const seed = `${year}-${month}`;
+        return {
+          year,
+          month,
+          theme: theme[0],
+          question: theme[1],
+          summary: year === 1996
+            ? "The imagined inaugural cohort gathers around a deceptively simple challenge: what does a free society ask of its citizens?"
+            : year === 2026
+              ? "The anniversary cohort looks forward, testing enduring liberal principles against questions of technology, trust and institutional change."
+              : `A fictional snapshot of the ${month} ${year} gathering, where students test assumptions, exchange perspectives and build friendships across disciplines and borders.`,
+          attendees: Array.from({ length: 30 }, (_, i) => ({
+            name: nameFor(year, month, i, "attendee"),
+            field: pick(fields, `${seed}-${i}-field`),
+            institution: pick(institutions, `${seed}-${i}-institution`),
+            nowRole: pick(currentRoles, `${seed}-${i}-role`),
+            nowOrg: pick(currentOrganisations, `${seed}-${i}-org`),
+            nowCity: pick(currentCities, `${seed}-${i}-now-city`)
+          })),
+          speakers: Array.from({ length: 4 }, (_, i) => ({
+            name: nameFor(year, month, i, "speaker"),
+            title: pick(speakerTitles, `${seed}-${i}-title`),
+            institution: pick(institutions, `${seed}-${i}-speaker-institution`),
+            session: `${pick(sessionStarts, `${seed}-${i}-start`)} ${pick(sessionEnds, `${seed}-${i}-end`)}`,
+            nowRole: pick(currentRoles, `${seed}-${i}-speaker-role`),
+            nowOrg: pick(currentOrganisations, `${seed}-${i}-speaker-org`),
+            nowCity: pick(currentCities, `${seed}-${i}-speaker-now-city`)
+          }))
+        };
+      });
+    });
+
+    const timeline = document.getElementById("timeline");
+    const detailTab = document.getElementById("detailTab");
+    const hoverCard = document.getElementById("hoverCard");
+    const hoverYear = document.getElementById("hoverYear");
+    const hoverTheme = document.getElementById("hoverTheme");
+    const attendeeTab = document.getElementById("attendeeTab");
+    const speakerTab = document.getElementById("speakerTab");
+    const attendeePanel = document.getElementById("attendeePanel");
+    const speakerPanel = document.getElementById("speakerPanel");
+    const cohortPicker = document.getElementById("cohortPicker");
+    const cohortOptions = document.getElementById("cohortOptions");
+    const profileDialog = document.getElementById("profileDialog");
+    let selectedYear = null;
+    let currentCohort = null;
+
+    years.forEach(year => {
+      const yearCohorts = cohorts.filter(c => c.year === year);
+      const cohort = yearCohorts[0];
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `year-node${yearCohorts.length === 2 ? " double" : ""}`;
+      button.dataset.year = year;
+      button.setAttribute("aria-controls", "detailTab");
+      button.setAttribute("aria-label", `Open ${year}: ${yearCohorts.length} ${yearCohorts.length === 1 ? "cohort" : "cohorts"}`);
+      button.innerHTML = `<span class="year-label">${year}</span>`;
+      button.addEventListener("mouseenter", event => showHover(event, cohort, yearCohorts.length));
+      button.addEventListener("mousemove", event => positionHover(event));
+      button.addEventListener("mouseleave", hideHover);
+      button.addEventListener("focus", event => showHover(event, cohort, yearCohorts.length));
+      button.addEventListener("blur", hideHover);
+      button.addEventListener("click", () => openYear(year));
+      timeline.appendChild(button);
+    });
+
+    function positionHover(event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      hoverCard.style.left = `${Math.max(116, Math.min(window.innerWidth - 116, rect.left + rect.width / 2))}px`;
+      hoverCard.style.top = `${Math.max(110, rect.top)}px`;
+    }
+    function showHover(event, cohort, count) {
+      hoverYear.textContent = cohort.year;
+      hoverTheme.textContent = count === 2 ? "Two cohorts · May and September" : `${cohort.theme} · May cohort`;
+      positionHover(event);
+      hoverCard.classList.add("show");
+    }
+    function hideHover() { hoverCard.classList.remove("show"); }
+
+    function openYear(year, shouldScroll = true) {
+      const yearCohorts = cohorts.filter(c => c.year === year);
+      selectedYear = year;
+      document.querySelectorAll(".year-node").forEach(node => {
+        const active = Number(node.dataset.year) === year;
+        node.classList.toggle("active", active);
+        node.setAttribute("aria-current", active ? "true" : "false");
+      });
+      cohortPicker.hidden = yearCohorts.length === 1;
+      cohortOptions.innerHTML = yearCohorts.map((cohort, index) => `<button class="cohort-option${index === 0 ? " active" : ""}" type="button" data-month="${cohort.month}">${cohort.month} cohort</button>`).join("");
+      cohortOptions.querySelectorAll(".cohort-option").forEach(button => button.addEventListener("click", () => {
+        const cohort = yearCohorts.find(item => item.month === button.dataset.month);
+        cohortOptions.querySelectorAll(".cohort-option").forEach(option => option.classList.toggle("active", option === button));
+        renderCohort(cohort);
+      }));
+      renderCohort(yearCohorts[0]);
+      detailTab.classList.add("open");
+      if (shouldScroll && !verticalLayout) detailTab.scrollIntoView({ behavior: "smooth", block: "start" });
+      const url = new URL(window.location.href);
+      url.searchParams.set("year", year);
+      history.replaceState(null, "", url);
+      hideHover();
+    }
+
+    function renderCohort(cohort) {
+      currentCohort = cohort;
+      detailTab.classList.toggle("no-photos", cohort.year <= 2010);
+      document.getElementById("selectedYear").textContent = cohort.year;
+      document.getElementById("selectedMonth").textContent = `${cohort.month} cohort`;
+      document.getElementById("selectedTheme").textContent = cohort.theme;
+      document.getElementById("selectedSummary").textContent = cohort.summary;
+      document.getElementById("selectedQuestion").textContent = cohort.question;
+      attendeePanel.innerHTML = `<div class="people-grid">${cohort.attendees.map((person, i) => `<button class="person" type="button" data-person-index="${i}"><div class="portrait" style="${portraitStyle(person.name)}"></div><strong>${person.name}</strong><span><i class="field-dot" style="--dot:${fieldColors[person.field]}"></i>${person.field}</span><span>${person.institution}</span></button>`).join("")}</div>`;
+      speakerPanel.innerHTML = `<div class="speaker-grid">${cohort.speakers.map((speaker, i) => `<button class="speaker" type="button" data-speaker-index="${i}"><div class="portrait" style="${portraitStyle(speaker.name)}"></div><span class="speaker-index">Speaker 0${i + 1}</span><strong>${speaker.name}</strong><span>${speaker.title} · ${speaker.institution}</span><p>${speaker.session}</p></button>`).join("")}</div>`;
+      attendeePanel.querySelectorAll("[data-person-index]").forEach(button => button.addEventListener("click", () => openProfile(cohort.attendees[Number(button.dataset.personIndex)], "Attendee")));
+      speakerPanel.querySelectorAll("[data-speaker-index]").forEach(button => button.addEventListener("click", () => openProfile(cohort.speakers[Number(button.dataset.speakerIndex)], "Speaker")));
+      selectTab("attendees");
+    }
+
+    function openProfile(person, type) {
+      const hasPhoto = currentCohort.year > 2010;
+      profileDialog.classList.toggle("no-photos", !hasPhoto);
+      document.getElementById("profilePortrait").setAttribute("style", hasPhoto ? portraitStyle(person.name) : "");
+      document.getElementById("profileConference").textContent = `${currentCohort.month} ${currentCohort.year} · ${type}`;
+      document.getElementById("profileName").textContent = person.name;
+      document.getElementById("profileRole").textContent = `${person.nowRole} at ${person.nowOrg}`;
+      document.getElementById("profileMeta").textContent = `${person.nowCity} · ${type === "Speaker" ? person.title : "Studied " + person.field}`;
+      const focus = type === "Speaker" ? `Their ${currentCohort.year} session explored “${person.session}”.` : `Their original field was ${person.field} at ${person.institution}.`;
+      document.getElementById("profileBio").textContent = `${person.name} now works across policy, ideas and public life from ${person.nowCity}. ${focus} This present-day profile is simulated for the anniversary concept.`;
+      profileDialog.showModal();
+    }
+
+    document.getElementById("profileClose").addEventListener("click", () => profileDialog.close());
+    profileDialog.addEventListener("click", event => { if (event.target === profileDialog) profileDialog.close(); });
+
+    function selectTab(tab) {
+      const attendees = tab === "attendees";
+      attendeeTab.classList.toggle("active", attendees);
+      speakerTab.classList.toggle("active", !attendees);
+      attendeeTab.setAttribute("aria-selected", attendees ? "true" : "false");
+      speakerTab.setAttribute("aria-selected", attendees ? "false" : "true");
+      attendeeTab.tabIndex = attendees ? 0 : -1;
+      speakerTab.tabIndex = attendees ? -1 : 0;
+      attendeePanel.hidden = !attendees;
+      speakerPanel.hidden = attendees;
+    }
+
+    attendeeTab.addEventListener("click", () => selectTab("attendees"));
+    speakerTab.addEventListener("click", () => selectTab("speakers"));
+    document.getElementById("closeTab").addEventListener("click", () => {
+      detailTab.classList.remove("open");
+      document.querySelectorAll(".year-node").forEach(node => {
+        node.classList.remove("active");
+        node.removeAttribute("aria-current");
+      });
+      selectedYear = null;
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && selectedYear !== null && !profileDialog.open && !event.defaultPrevented) document.getElementById("closeTab").click();
+    });
+    profileDialog.addEventListener("keydown", event => { if (event.key === "Escape") event.stopPropagation(); });
+    timeline.addEventListener("keydown", event => {
+      const node = event.target.closest(".year-node");
+      if (!node) return;
+      const index = years.indexOf(Number(node.dataset.year));
+      const moves = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+      let next = event.key === "Home" ? 0 : event.key === "End" ? years.length - 1 : event.key in moves ? Math.max(0, Math.min(years.length - 1, index + moves[event.key])) : null;
+      if (next !== null) { event.preventDefault(); timeline.children[next].focus(); }
+    });
+    document.querySelector(".tab-switcher").addEventListener("keydown", event => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const attendees = event.key === "Home" || (event.key !== "End" && event.target === speakerTab);
+      selectTab(attendees ? "attendees" : "speakers");
+      (attendees ? attendeeTab : speakerTab).focus();
+    });
+    function setLayout(vertical) {
+      verticalLayout = vertical;
+      document.body.classList.toggle("vertical-layout", vertical);
+      document.getElementById("horizontalView").setAttribute("aria-pressed", String(!vertical));
+      document.getElementById("verticalView").setAttribute("aria-pressed", String(vertical));
+      const url = new URL(window.location.href);
+      url.searchParams.set("layout", vertical ? "vertical" : "horizontal");
+      history.replaceState(null, "", url);
+      hideHover();
+    }
+    document.getElementById("horizontalView").addEventListener("click", () => setLayout(false));
+    document.getElementById("verticalView").addEventListener("click", () => setLayout(true));
+    setLayout(verticalLayout);
+    const initialYear = Number(new URLSearchParams(location.search).get("year"));
+    openYear(years.includes(initialYear) ? initialYear : 2026, false);
+    document.querySelector('.year-node.active').scrollIntoView({ block: "nearest", inline: "center", behavior: "instant" });
+    window.scrollTo(0, 0);
+  </script>
+</body>
+</html>
