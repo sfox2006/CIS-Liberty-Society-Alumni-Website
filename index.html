@@ -306,18 +306,7 @@
       color: var(--ink);
       font-size: 14px;
     }
-    body.vertical-layout .year-node.multi .year-label::after {
-      content: attr(data-months);
-      margin-left: 12px;
-      padding: 4px 7px;
-      color: var(--forest);
-      background: #edf5f3;
-      border-radius: 3px;
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-    }
+    body.vertical-layout .year-node.multi .year-label::after { content: none; }
     body.vertical-layout .timeline-note { max-width: 270px; margin: 22px 0 0 102px; text-align: left; }
   </style>
   <link rel="stylesheet" href="refinement.css">
@@ -339,7 +328,7 @@
 
     <section class="timeline-shell" aria-label="Conference timeline">
       <div class="timeline" id="timeline" role="group" aria-label="Conference years"></div>
-      <p class="timeline-note"><span class="double-key" aria-hidden="true"><i></i><i></i></span>Extra marker = multiple cohorts in that year</p>
+      <p class="timeline-note"><span class="double-key" aria-hidden="true"><i></i><i></i></span>Extra marker = multiple cohorts. Choose the month after opening the year.</p>
     </section>
 
     <section class="detail-tab" id="detailTab" aria-live="polite" aria-label="Selected year details">
@@ -531,15 +520,13 @@
     years.forEach(year => {
       const yearCohorts = cohorts.filter(c => c.year === year);
       const cohort = yearCohorts[0];
-      const monthList = yearCohorts.map(item => item.month).join(" + ");
       const button = document.createElement("button");
       button.type = "button";
       button.className = `year-node${yearCohorts.length > 1 ? " multi" : ""}`;
       button.dataset.year = year;
-      button.dataset.months = monthList;
       button.setAttribute("aria-controls", "detailTab");
-      button.setAttribute("aria-label", `Open ${year}: ${yearCohorts.length} ${yearCohorts.length === 1 ? "cohort" : "cohorts"}`);
-      button.innerHTML = `<span class="year-label" data-months="${yearCohorts.length > 1 ? monthList : ""}">${year}</span>`;
+      button.setAttribute("aria-label", `Open ${year}: ${yearCohorts.length === 1 ? "1 cohort" : yearCohorts.length + " cohorts, month choices shown in the detail panel"}`);
+      button.innerHTML = `<span class="year-label">${year}</span>`;
       button.addEventListener("mouseenter", event => showHover(event, cohort, yearCohorts.length));
       button.addEventListener("mousemove", event => positionHover(event));
       button.addEventListener("mouseleave", hideHover);
@@ -555,9 +542,8 @@
       hoverCard.style.top = `${Math.max(110, rect.top)}px`;
     }
     function showHover(event, cohort, count) {
-      const yearCohorts = cohorts.filter(c => c.year === cohort.year);
       hoverYear.textContent = cohort.year;
-      hoverTheme.textContent = count > 1 ? `${count} cohorts · ${yearCohorts.map(item => item.month).join(", ")}` : `${cohort.month} cohort`;
+      hoverTheme.textContent = count > 1 ? `${count} cohorts this year` : `${cohort.month} cohort`;
       positionHover(event);
       hoverCard.classList.add("show");
     }

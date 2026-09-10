@@ -70,9 +70,9 @@ body.vertical-layout .timeline { padding: 8px 0; }
 body.vertical-layout .timeline::before { left: 23px; top: 30px; bottom: 30px; }
 body.vertical-layout .year-node { padding-left: 18px; height: 44px; border-radius: 6px; }
 body.vertical-layout .year-node.active { background: #005e5610; }
-body.vertical-layout .year-node.double::after { left: 26px; top: 10px; }
+body.vertical-layout .year-node.multi::after { left: 26px; top: 10px; }
 body.vertical-layout .year-label { margin-left: 18px; }
-body.vertical-layout .year-node.double .year-label::after { content: "×2"; font-size: 12px; padding: 3px 5px; margin-left: 12px; }
+body.vertical-layout .year-node.multi .year-label::after { content: none; }
 body.vertical-layout .timeline-note { margin: 12px 4px 4px; }
 body.vertical-layout .detail-tab { margin-top: 0; }
 body.vertical-layout .detail-head { grid-template-columns: 110px minmax(0, 1fr) 38px; gap: 18px; }
