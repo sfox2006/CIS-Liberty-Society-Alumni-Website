@@ -322,7 +322,7 @@
   </style>
   <link rel="stylesheet" href="refinement.css">
 </head>
-<body>
+<body class="vertical-layout">
   <header>
     <div class="hero">
       <p class="kicker">1996—2026 · 30 years</p>
@@ -334,7 +334,7 @@
   <main>
     <div class="timeline-heading">
       <h2>The anniversary timeline</h2>
-      <div class="timeline-controls"><p>Choose a year. Meet the people.</p><div class="layout-picker" aria-label="Timeline orientation"><button type="button" id="horizontalView" aria-pressed="true">Horizontal</button><button type="button" id="verticalView" aria-pressed="false">Vertical</button></div></div>
+      <div class="timeline-controls"><p>Choose a year. Meet the people.</p></div>
     </div>
 
     <section class="timeline-shell" aria-label="Conference timeline">
@@ -389,7 +389,7 @@
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
   <script>
-    let verticalLayout = new URLSearchParams(window.location.search).get("layout") === "vertical";
+    const verticalLayout = true;
     if (verticalLayout) {
       document.body.classList.add("vertical-layout");
       document.title = "30 Years of Liberty & Society — Vertical Timeline";
@@ -619,19 +619,9 @@
       selectTab(attendees ? "attendees" : "speakers");
       (attendees ? attendeeTab : speakerTab).focus();
     });
-    function setLayout(vertical) {
-      verticalLayout = vertical;
-      document.body.classList.toggle("vertical-layout", vertical);
-      document.getElementById("horizontalView").setAttribute("aria-pressed", String(!vertical));
-      document.getElementById("verticalView").setAttribute("aria-pressed", String(vertical));
-      const url = new URL(window.location.href);
-      url.searchParams.set("layout", vertical ? "vertical" : "horizontal");
-      history.replaceState(null, "", url);
-      hideHover();
-    }
-    document.getElementById("horizontalView").addEventListener("click", () => setLayout(false));
-    document.getElementById("verticalView").addEventListener("click", () => setLayout(true));
-    setLayout(verticalLayout);
+    const layoutUrl = new URL(window.location.href);
+    layoutUrl.searchParams.delete("layout");
+    history.replaceState(null, "", layoutUrl);
     const initialYear = Number(new URLSearchParams(location.search).get("year"));
     openYear(years.includes(initialYear) ? initialYear : 2026, false);
     document.querySelector('.year-node.active').scrollIntoView({ block: "nearest", inline: "center", behavior: "instant" });
