@@ -132,7 +132,7 @@
       background: var(--coral);
       box-shadow: 0 0 0 6px rgba(238,112,92,.15);
     }
-    .year-node.double::after {
+    .year-node.multi::after {
       content: "";
       position: absolute;
       width: 7px;
@@ -142,7 +142,7 @@
       border: 2px solid var(--forest);
       transform: translate(8px, -8px);
     }
-    .year-node.double.active::after { background: var(--forest-2); }
+    .year-node.multi.active::after { background: var(--forest-2); }
     .year-label {
       position: absolute;
       top: 55px;
@@ -291,7 +291,7 @@
       padding-left: 70px;
     }
     body.vertical-layout .year-node::before { position: relative; flex: 0 0 auto; }
-    body.vertical-layout .year-node.double::after {
+    body.vertical-layout .year-node.multi::after {
       left: 79px;
       top: 13px;
       transform: none;
@@ -306,8 +306,8 @@
       color: var(--ink);
       font-size: 14px;
     }
-    body.vertical-layout .year-node.double .year-label::after {
-      content: "May + September";
+    body.vertical-layout .year-node.multi .year-label::after {
+      content: attr(data-months);
       margin-left: 12px;
       padding: 4px 7px;
       color: var(--forest);
@@ -339,7 +339,7 @@
 
     <section class="timeline-shell" aria-label="Conference timeline">
       <div class="timeline" id="timeline" role="group" aria-label="Conference years"></div>
-      <p class="timeline-note"><span class="double-key" aria-hidden="true"><i></i><i></i></span>Double marker = May and September cohorts</p>
+      <p class="timeline-note"><span class="double-key" aria-hidden="true"><i></i><i></i></span>Extra marker = multiple cohorts in that year</p>
     </section>
 
     <section class="detail-tab" id="detailTab" aria-live="polite" aria-label="Selected year details">
@@ -384,7 +384,7 @@
       </div>
     </div>
   </dialog>
-  <footer>1996–2026 inclusive · 36 simulated cohorts · 1,080 attendees · 144 speakers. Five years contain May and September conferences.</footer>
+  <footer>Scan-backed month/year schedule · 37 simulated cohorts · 1,110 attendees · 148 speakers. Years without a readable month/year in the scans are not shown.</footer>
 
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
@@ -396,9 +396,46 @@
     }
     if (window.PORTRAIT_ATLAS) document.documentElement.style.setProperty("--atlas", `url("${window.PORTRAIT_ATLAS}")`);
 
-    const START = 1996;
-    const END = 2026;
-    const years = Array.from({ length: END - START + 1 }, (_, i) => START + i);
+    const cohortSchedule = [
+      { year: 1998, month: "February", location: "Sydney", sourcePages: "75" },
+      { year: 1998, month: "July", location: "", sourcePages: "73" },
+      { year: 2000, month: "February", location: "Auckland", sourcePages: "70" },
+      { year: 2000, month: "April", location: "Melbourne", sourcePages: "68" },
+      { year: 2001, month: "April", location: "Melbourne", sourcePages: "66" },
+      { year: 2002, month: "April", location: "Sydney", sourcePages: "64, 65" },
+      { year: 2002, month: "August", location: "Sydney", sourcePages: "61, 62, 63" },
+      { year: 2003, month: "May", location: "Sydney", sourcePages: "57-60" },
+      { year: 2004, month: "April", location: "Sydney", sourcePages: "55" },
+      { year: 2004, month: "September", location: "Sydney", sourcePages: "53" },
+      { year: 2005, month: "April", location: "Sydney", sourcePages: "51" },
+      { year: 2005, month: "July", location: "Sydney", sourcePages: "47, 49" },
+      { year: 2005, month: "October", location: "", sourcePages: "45", event: "Advanced Liberty & Society" },
+      { year: 2006, month: "April", location: "Sydney", sourcePages: "43" },
+      { year: 2007, month: "April", location: "Sydney", sourcePages: "41" },
+      { year: 2007, month: "September", location: "Sydney", sourcePages: "39" },
+      { year: 2008, month: "April", location: "Sydney", sourcePages: "37" },
+      { year: 2008, month: "August", location: "Sydney", sourcePages: "35" },
+      { year: 2009, month: "May", location: "Sydney", sourcePages: "33, 34" },
+      { year: 2009, month: "September", location: "Sydney", sourcePages: "31, 32" },
+      { year: 2010, month: "September", location: "Sydney", sourcePages: "29, 30" },
+      { year: 2011, month: "May", location: "Sydney", sourcePages: "27" },
+      { year: 2011, month: "December", location: "Sydney", sourcePages: "25" },
+      { year: 2012, month: "October", location: "Sydney", sourcePages: "23" },
+      { year: 2013, month: "April", location: "Sydney", sourcePages: "21" },
+      { year: 2013, month: "September", location: "Sydney", sourcePages: "19" },
+      { year: 2014, month: "April", location: "Sydney", sourcePages: "17" },
+      { year: 2014, month: "September", location: "Sydney", sourcePages: "15, 16" },
+      { year: 2015, month: "May", location: "Sydney", sourcePages: "13" },
+      { year: 2015, month: "July", location: "Perth", sourcePages: "11" },
+      { year: 2016, month: "May", location: "Sydney", sourcePages: "9" },
+      { year: 2017, month: "March", location: "Sydney", sourcePages: "7" },
+      { year: 2017, month: "August", location: "Perth", sourcePages: "5, 6" },
+      { year: 2018, month: "May", location: "Sydney", sourcePages: "3, 4" },
+      { year: 2019, month: "May", location: "", sourcePages: "2" },
+      { year: 2019, month: "September", location: "Perth", sourcePages: "1" },
+      { year: 2025, month: "March", location: "Western Australia", sourcePages: "44", event: "Mannkal Future Leaders Event" }
+    ];
+    const years = [...new Set(cohortSchedule.map(item => item.year))];
     const firstNames = ["Aisha","Alexander","Amelia","Anika","Benjamin","Callum","Charlotte","Chloe","Daniel","Eleanor","Eliza","Ethan","Gabriel","Grace","Harper","Hugo","Imogen","Isaac","Isla","Jack","Jade","Jasper","Josephine","Kai","Lachlan","Leila","Leo","Lily","Lucas","Maddison","Maeve","Marcus","Maya","Mia","Nathan","Nina","Noah","Oliver","Priya","Rafael","Ruby","Samantha","Samuel","Sienna","Sophie","Theo","Thomas","William","Yasmin","Zoe"];
     const lastNames = ["Adams","Bennett","Campbell","Chen","Clarke","Davis","Edwards","Evans","Foster","Fraser","Gibson","Grant","Green","Hall","Harris","Henderson","Hughes","Jackson","Kaur","Kelly","Kennedy","Kim","Lee","Lewis","Lim","Martin","McKenzie","Mitchell","Morgan","Murray","Nguyen","O'Connor","Patel","Reid","Roberts","Robinson","Ryan","Singh","Smith","Taylor","Thomas","Thompson","Walker","Ward","White","Williams","Wilson","Wong","Young"];
     const institutions = ["Australian National University","University of Sydney","Monash University","University of Melbourne","University of Queensland","University of Auckland","University of Otago","University of Adelaide","University of Tasmania","University of Western Australia","Macquarie University","UNSW Sydney","Griffith University","Victoria University of Wellington"];
@@ -433,27 +470,24 @@
       const y = Math.floor(cell / 8) * (100 / 7);
       return `--x:${x.toFixed(3)}%;--y:${y.toFixed(3)}%`;
     };
-    const doubleYears = new Set([1999, 2004, 2010, 2017, 2023]);
     const nameFor = (year, month, index, role) => {
-      const editionOffset = month === "September" ? 29 : 0;
+      const editionOffset = month.length * 17;
       return `${firstNames[(year * 7 + index * 11 + editionOffset + (role === "speaker" ? 17 : 0)) % firstNames.length]} ${lastNames[(year * 13 + index * 17 + editionOffset + (role === "speaker" ? 23 : 0)) % lastNames.length]}`;
     };
 
-    const cohorts = years.flatMap(year => {
-      const months = doubleYears.has(year) ? ["May", "September"] : ["May"];
-      return months.map((month, editionIndex) => {
-        const theme = themes[(year - START + editionIndex * 3) % themes.length];
-        const seed = `${year}-${month}`;
+    const cohorts = cohortSchedule.map((entry, editionIndex) => {
+        const { year, month } = entry;
+        const theme = themes[(year + month.length + editionIndex * 3) % themes.length];
+        const seed = `${year}-${month}-${entry.location || ""}`;
         return {
           year,
           month,
-          theme: theme[0],
-          question: theme[1],
-          summary: year === 1996
-            ? "The imagined inaugural cohort gathers around a deceptively simple challenge: what does a free society ask of its citizens?"
-            : year === 2026
-              ? "The anniversary cohort looks forward, testing enduring liberal principles against questions of technology, trust and institutional change."
-              : `A fictional snapshot of the ${month} ${year} gathering, where students test assumptions, exchange perspectives and build friendships across disciplines and borders.`,
+          location: entry.location,
+          sourcePages: entry.sourcePages,
+          event: entry.event || "Liberty & Society",
+          theme: "",
+          question: "",
+          summary: "",
           attendees: Array.from({ length: 30 }, (_, i) => ({
             name: nameFor(year, month, i, "attendee"),
             field: pick(fields, `${seed}-${i}-field`),
@@ -472,7 +506,6 @@
             nowCity: pick(currentCities, `${seed}-${i}-speaker-now-city`)
           }))
         };
-      });
     });
 
     const timeline = document.getElementById("timeline");
@@ -493,13 +526,15 @@
     years.forEach(year => {
       const yearCohorts = cohorts.filter(c => c.year === year);
       const cohort = yearCohorts[0];
+      const monthList = yearCohorts.map(item => item.month).join(" + ");
       const button = document.createElement("button");
       button.type = "button";
-      button.className = `year-node${yearCohorts.length === 2 ? " double" : ""}`;
+      button.className = `year-node${yearCohorts.length > 1 ? " multi" : ""}`;
       button.dataset.year = year;
+      button.dataset.months = monthList;
       button.setAttribute("aria-controls", "detailTab");
       button.setAttribute("aria-label", `Open ${year}: ${yearCohorts.length} ${yearCohorts.length === 1 ? "cohort" : "cohorts"}`);
-      button.innerHTML = `<span class="year-label">${year}</span>`;
+      button.innerHTML = `<span class="year-label" data-months="${yearCohorts.length > 1 ? monthList : ""}">${year}</span>`;
       button.addEventListener("mouseenter", event => showHover(event, cohort, yearCohorts.length));
       button.addEventListener("mousemove", event => positionHover(event));
       button.addEventListener("mouseleave", hideHover);
@@ -515,8 +550,9 @@
       hoverCard.style.top = `${Math.max(110, rect.top)}px`;
     }
     function showHover(event, cohort, count) {
+      const yearCohorts = cohorts.filter(c => c.year === cohort.year);
       hoverYear.textContent = cohort.year;
-      hoverTheme.textContent = count === 2 ? "Two cohorts · May and September" : "May cohort";
+      hoverTheme.textContent = count > 1 ? `${count} cohorts · ${yearCohorts.map(item => item.month).join(", ")}` : `${cohort.month} cohort`;
       positionHover(event);
       hoverCard.classList.add("show");
     }
@@ -531,6 +567,7 @@
         node.setAttribute("aria-current", active ? "true" : "false");
       });
       cohortPicker.hidden = yearCohorts.length === 1;
+      cohortPicker.querySelector("strong").textContent = `${year} has ${yearCohorts.length} scanned cohorts — choose one`;
       cohortOptions.innerHTML = yearCohorts.map((cohort, index) => `<button class="cohort-option${index === 0 ? " active" : ""}" type="button" data-month="${cohort.month}">${cohort.month} cohort</button>`).join("");
       cohortOptions.querySelectorAll(".cohort-option").forEach(button => button.addEventListener("click", () => {
         const cohort = yearCohorts.find(item => item.month === button.dataset.month);
@@ -550,7 +587,7 @@
       currentCohort = cohort;
       detailTab.classList.toggle("no-photos", cohort.year <= 2010);
       document.getElementById("selectedYear").textContent = cohort.year;
-      document.getElementById("selectedMonth").textContent = `${cohort.month} cohort`;
+      document.getElementById("selectedMonth").textContent = `${cohort.month} cohort${cohort.location ? " · " + cohort.location : ""}`;
       document.getElementById("selectedTheme").textContent = "";
       document.getElementById("selectedSummary").textContent = "";
       document.getElementById("selectedQuestion").textContent = "";
@@ -619,11 +656,11 @@
       selectTab(attendees ? "attendees" : "speakers");
       (attendees ? attendeeTab : speakerTab).focus();
     });
-    const layoutUrl = new URL(window.location.href);
+      const layoutUrl = new URL(window.location.href);
     layoutUrl.searchParams.delete("layout");
     history.replaceState(null, "", layoutUrl);
     const initialYear = Number(new URLSearchParams(location.search).get("year"));
-    openYear(years.includes(initialYear) ? initialYear : 2026, false);
+    openYear(years.includes(initialYear) ? initialYear : years[years.length - 1], false);
     document.querySelector('.year-node.active').scrollIntoView({ block: "nearest", inline: "center", behavior: "instant" });
     window.scrollTo(0, 0);
   </script>
