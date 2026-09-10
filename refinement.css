@@ -10,7 +10,8 @@ html.embedded .profile-dialog { top: var(--profile-top, 24px); bottom: auto; max
 .profile-dialog.no-photos .profile-layout { grid-template-columns: 1fr; }
 .profile-dialog.no-photos .profile-visual { display: block; padding: 18px 26px; }
 .profile-dialog.no-photos .profile-visual span { margin: 0; }
-header { padding: 24px clamp(20px, 5vw, 74px) 30px; border-top: 5px solid var(--forest); }
+header { padding: 0 clamp(20px, 5vw, 74px) 30px; border-top: 0; }
+.detail-head .close-tab { grid-column: -2 / -1; }
 header::after { right: 5%; bottom: -28px; font-size: 230px; }
 .hero { padding-top: 38px; }
 h1 { font-size: clamp(2.7rem, 5vw, 4.6rem); line-height: 1.02; letter-spacing: -.045em; }

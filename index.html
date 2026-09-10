@@ -324,10 +324,6 @@
 </head>
 <body>
   <header>
-    <nav>
-      <div class="brand"><span class="brand-mark">L&amp;S</span><span>Liberty &amp; Society</span></div>
-      <span class="synthetic-badge">Interactive concept · Simulated data</span>
-    </nav>
     <div class="hero">
       <p class="kicker">1996—2026 · 30 years</p>
       <h1>Thirty years.<br>Countless conversations.</h1>
@@ -351,7 +347,7 @@
       <div class="detail-inner">
         <div class="detail-head">
           <div><div class="big-year" id="selectedYear"></div><span class="edition-label" id="selectedMonth"></span></div>
-          <div class="detail-copy">
+          <div class="detail-copy" hidden>
             <h3 id="selectedTheme"></h3>
             <p id="selectedSummary"></p>
             <p class="question" id="selectedQuestion"></p>
@@ -520,7 +516,7 @@
     }
     function showHover(event, cohort, count) {
       hoverYear.textContent = cohort.year;
-      hoverTheme.textContent = count === 2 ? "Two cohorts · May and September" : `${cohort.theme} · May cohort`;
+      hoverTheme.textContent = count === 2 ? "Two cohorts · May and September" : "May cohort";
       positionHover(event);
       hoverCard.classList.add("show");
     }
@@ -555,9 +551,9 @@
       detailTab.classList.toggle("no-photos", cohort.year <= 2010);
       document.getElementById("selectedYear").textContent = cohort.year;
       document.getElementById("selectedMonth").textContent = `${cohort.month} cohort`;
-      document.getElementById("selectedTheme").textContent = cohort.theme;
-      document.getElementById("selectedSummary").textContent = cohort.summary;
-      document.getElementById("selectedQuestion").textContent = cohort.question;
+      document.getElementById("selectedTheme").textContent = "";
+      document.getElementById("selectedSummary").textContent = "";
+      document.getElementById("selectedQuestion").textContent = "";
       attendeePanel.innerHTML = `<div class="people-grid">${cohort.attendees.map((person, i) => `<button class="person" type="button" data-person-index="${i}"><div class="portrait" style="${portraitStyle(person.name)}"></div><strong>${person.name}</strong><span><i class="field-dot" style="--dot:${fieldColors[person.field]}"></i>${person.field}</span><span>${person.institution}</span></button>`).join("")}</div>`;
       speakerPanel.innerHTML = `<div class="speaker-grid">${cohort.speakers.map((speaker, i) => `<button class="speaker" type="button" data-speaker-index="${i}"><div class="portrait" style="${portraitStyle(speaker.name)}"></div><span class="speaker-index">Speaker 0${i + 1}</span><strong>${speaker.name}</strong><span>${speaker.title} · ${speaker.institution}</span><p>${speaker.session}</p></button>`).join("")}</div>`;
       attendeePanel.querySelectorAll("[data-person-index]").forEach(button => button.addEventListener("click", () => openProfile(cohort.attendees[Number(button.dataset.personIndex)], "Attendee")));
