@@ -1146,7 +1146,9 @@ window.REAL_ATTENDEES = {
       "status": "2025 Graduate",
       "source": "L&S Alumni 2021-2025.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/turkish-delight-ati/",
+      "linkedinConfidence": "user-confirmed"
     },
     {
       "name": "Aaron Korczak-Krzeczowski",
@@ -1204,7 +1206,9 @@ window.REAL_ATTENDEES = {
       "status": "2025 Graduate",
       "source": "L&S Alumni 2021-2025.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/charlie-magdics-4623b9183/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Caydence Midgley",
@@ -1262,7 +1266,9 @@ window.REAL_ATTENDEES = {
       "status": "2025 Graduate",
       "source": "L&S Alumni 2021-2025.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/turkish-delight-ati/",
+      "linkedinConfidence": "user-confirmed"
     },
     {
       "name": "Raphaella Revis",
@@ -1466,9 +1472,7 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true,
-      "linkedin": "https://www.linkedin.com/in/sophia-blom-06875714b/",
-      "linkedinConfidence": "medium"
+      "noPhoto": true
     },
     {
       "name": "Lucy Cammock-Elliott",
@@ -1514,9 +1518,7 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true,
-      "linkedin": "https://www.linkedin.com/in/ella-dickson-771604392/",
-      "linkedinConfidence": "medium"
+      "noPhoto": true
     },
     {
       "name": "Amelia Dimech",
@@ -1622,7 +1624,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/niko-hatzistamatiou-16aab8389/",
+      "linkedinConfidence": "user-confirmed"
     },
     {
       "name": "Ned Heaton",
@@ -1644,7 +1648,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/maciej-jablonski-2974213b1/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Maxwell Johnston",
@@ -1654,7 +1660,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/maxwell-johnston-/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Benjamin Jorgensen",
@@ -1674,7 +1682,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/olivia-kempton-43651b213/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Miruthun Kumar",
@@ -1684,7 +1694,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/miruthun-kumar/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Hein Htet Kyaw",
@@ -1704,7 +1716,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/noemi-leinfellner-44aa14218/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Hamish Longstaff",
@@ -1714,7 +1728,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/hamish-longstaff-5013a6294/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Lachlan Mansour",
@@ -1734,7 +1750,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/emily-maxwell-597853300/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Therese Meney",
@@ -1754,7 +1772,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/sagnayo-mukherjee-9a76332b1/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Kai Nichols",
@@ -1774,7 +1794,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/maxim-nikiforov-7a555a324/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Robert O'Brien",
@@ -1794,7 +1816,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/evan-peart-503450269/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Jack Francis Sands",
@@ -1804,7 +1828,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/jackfsands/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Prithvi Shrivastav",
@@ -1814,7 +1840,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/prithvishrivastav/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Mathew Swan-Palacios",
@@ -1844,7 +1872,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/chloe-walsh-07b477356/",
+      "linkedinConfidence": "review-confirmed"
     },
     {
       "name": "Aaron Wei",
@@ -1854,7 +1884,9 @@ window.REAL_ATTENDEES = {
       "status": "Conference attendee",
       "source": "L&S26 Alumni Contacts.xlsx",
       "isReal": true,
-      "noPhoto": true
+      "noPhoto": true,
+      "linkedin": "https://www.linkedin.com/in/aaronecon/",
+      "linkedinConfidence": "review-confirmed"
     }
   ]
 };
