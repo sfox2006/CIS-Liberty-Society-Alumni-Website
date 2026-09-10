@@ -272,21 +272,37 @@
     body.vertical-layout .year-node {
       width: 100%;
       height: 52px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding-left: 70px;
+      display: block;
+      position: relative;
+      padding-left: 0;
     }
-    body.vertical-layout .year-node::before { position: relative; flex: 0 0 auto; }
+    body.vertical-layout .year-node::before {
+      position: absolute;
+      left: 68px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    body.vertical-layout .year-node:hover::before,
+    body.vertical-layout .year-node:focus-visible::before {
+      transform: translateY(-50%) scale(1.55);
+    }
+    body.vertical-layout .year-node.active::before {
+      transform: translateY(-50%) scale(1.7);
+    }
     body.vertical-layout .year-label,
     body.vertical-layout .year-node:nth-child(5n + 1) .year-label,
     body.vertical-layout .year-node:first-child .year-label,
     body.vertical-layout .year-node:last-child .year-label {
-      position: static;
-      transform: none;
-      margin-left: 26px;
+      position: absolute;
+      left: 108px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: 0;
       color: var(--ink);
       font-size: 14px;
+      line-height: 1;
+      text-align: left;
+      white-space: nowrap;
     }
     body.vertical-layout .timeline-note { display: none; }
   </style>

@@ -68,9 +68,25 @@ body.vertical-layout .timeline-heading { grid-column: 1 / -1; margin-bottom: 0; 
 body.vertical-layout .timeline-shell { padding: 12px; position: sticky; top: 20px; max-height: calc(100dvh - 40px); overflow: auto; scrollbar-width: thin; }
 body.vertical-layout .timeline { padding: 8px 0; }
 body.vertical-layout .timeline::before { left: 23px; top: 30px; bottom: 30px; }
-body.vertical-layout .year-node { padding-left: 18px; height: 44px; border-radius: 6px; }
+body.vertical-layout .year-node { display: block; position: relative; padding-left: 0; height: 44px; border-radius: 6px; }
 body.vertical-layout .year-node.active { background: #005e5610; }
-body.vertical-layout .year-label { margin-left: 18px; }
+body.vertical-layout .year-node::before { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); }
+body.vertical-layout .year-node:hover::before,
+body.vertical-layout .year-node:focus-visible::before { transform: translateY(-50%) scale(1.55); }
+body.vertical-layout .year-node.active::before { transform: translateY(-50%) scale(1.7); }
+body.vertical-layout .year-label,
+body.vertical-layout .year-node:nth-child(5n + 1) .year-label,
+body.vertical-layout .year-node:first-child .year-label,
+body.vertical-layout .year-node:last-child .year-label {
+  position: absolute;
+  left: 58px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 0;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: left;
+}
 body.vertical-layout .timeline-note { display: none; }
 body.vertical-layout .detail-tab { margin-top: 0; }
 body.vertical-layout .detail-head { grid-template-columns: 110px minmax(0, 1fr) 38px; gap: 18px; }
