@@ -384,7 +384,7 @@
       </div>
     </div>
   </dialog>
-  <footer>Scan-backed month/year schedule · 37 simulated cohorts · 1,110 attendees · 148 speakers. Years without a readable month/year in the scans are not shown.</footer>
+  <footer>Source-backed month/year schedule · 42 simulated cohorts · 1,260 attendees · 168 speakers. Years without a readable month/year in the supplied data are not shown.</footer>
 
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
@@ -433,7 +433,12 @@
       { year: 2018, month: "May", location: "Sydney", sourcePages: "3, 4" },
       { year: 2019, month: "May", location: "", sourcePages: "2" },
       { year: 2019, month: "September", location: "Perth", sourcePages: "1" },
-      { year: 2025, month: "March", location: "Western Australia", sourcePages: "44", event: "Mannkal Future Leaders Event" }
+      { year: 2021, month: "November", location: "", sourcePages: "L&S Alumni 2021-2025.xlsx", sourceType: "spreadsheet" },
+      { year: 2022, month: "May", location: "", sourcePages: "L&S Alumni 2021-2025.xlsx", sourceType: "spreadsheet" },
+      { year: 2024, month: "March", location: "", sourcePages: "L&S Alumni 2021-2025.xlsx", sourceType: "spreadsheet" },
+      { year: 2024, month: "September", location: "", sourcePages: "L&S Alumni 2021-2025.xlsx", sourceType: "spreadsheet" },
+      { year: 2025, month: "April", location: "", sourcePages: "L&S Alumni 2021-2025.xlsx", sourceType: "spreadsheet" },
+      { year: 2026, month: "May", location: "", sourcePages: "L&S26 Alumni Contacts.xlsx", sourceType: "spreadsheet" }
     ];
     const years = [...new Set(cohortSchedule.map(item => item.year))];
     const firstNames = ["Aisha","Alexander","Amelia","Anika","Benjamin","Callum","Charlotte","Chloe","Daniel","Eleanor","Eliza","Ethan","Gabriel","Grace","Harper","Hugo","Imogen","Isaac","Isla","Jack","Jade","Jasper","Josephine","Kai","Lachlan","Leila","Leo","Lily","Lucas","Maddison","Maeve","Marcus","Maya","Mia","Nathan","Nina","Noah","Oliver","Priya","Rafael","Ruby","Samantha","Samuel","Sienna","Sophie","Theo","Thomas","William","Yasmin","Zoe"];
