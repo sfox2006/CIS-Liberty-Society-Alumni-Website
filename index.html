@@ -200,6 +200,9 @@
     .person strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
     .person span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
     .portrait { width: 100%; aspect-ratio: 1; margin-bottom: 11px; border-radius: 9px; background-image: var(--atlas); background-size: 800% 800%; background-position: var(--x) var(--y); background-repeat: no-repeat; }
+    .person.no-photo { grid-template-columns: minmax(0, 1fr); }
+    .person.no-photo .portrait { display: none; }
+    .person.no-photo span, .person.no-photo::after { grid-column: 1; }
     .field-dot { width: 7px; height: 7px; display: inline-block !important; margin: 0 5px 1px 0 !important; border-radius: 50%; background: var(--dot); }
     .speaker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .speaker { padding: 12px; color: white; background: var(--forest); border: 0; border-radius: 15px; text-align: left; cursor: pointer; }
@@ -369,10 +372,11 @@
       </div>
     </div>
   </dialog>
-  <footer>Source-backed month/year schedule · 42 simulated cohorts · 1,260 attendees · 168 speakers. Years without a readable month/year in the supplied data are not shown.</footer>
+  <footer>Source-backed month/year schedule · Real attendee names shown for 2021–2026 where supplied. Contact details are not published.</footer>
 
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
+  <script src="real-attendees.js"></script>
   <script>
     const verticalLayout = true;
     if (verticalLayout) {
@@ -469,6 +473,8 @@
         const { year, month } = entry;
         const theme = themes[(year + month.length + editionIndex * 3) % themes.length];
         const seed = `${year}-${month}-${entry.location || ""}`;
+        const realAttendeeKey = `${year}-${month}`;
+        const realAttendees = window.REAL_ATTENDEES && window.REAL_ATTENDEES[realAttendeeKey];
         return {
           year,
           month,
@@ -478,7 +484,7 @@
           theme: "",
           question: "",
           summary: "",
-          attendees: Array.from({ length: 30 }, (_, i) => ({
+          attendees: realAttendees || Array.from({ length: 30 }, (_, i) => ({
             name: nameFor(year, month, i, "attendee"),
             field: pick(fields, `${seed}-${i}-field`),
             institution: pick(institutions, `${seed}-${i}-institution`),
@@ -545,6 +551,13 @@
     }
     function hideHover() { hoverCard.classList.remove("show"); }
 
+    function attendeeCard(person, i) {
+      const noPhoto = person.noPhoto || currentCohort.year <= 2010;
+      const fieldColor = fieldColors[person.field] || fieldColors["Public Policy"];
+      const secondary = person.state ? `State: ${person.state}` : person.institution;
+      return `<button class="person${noPhoto ? " no-photo" : ""}" type="button" data-person-index="${i}"><div class="portrait" style="${portraitStyle(person.name)}"></div><strong>${person.name}</strong><span><i class="field-dot" style="--dot:${fieldColor}"></i>${person.field || "Alumni"}</span><span>${secondary}</span></button>`;
+    }
+
     function openYear(year, shouldScroll = true) {
       const yearCohorts = cohorts.filter(c => c.year === year);
       selectedYear = year;
@@ -578,7 +591,9 @@
       document.getElementById("selectedTheme").textContent = "";
       document.getElementById("selectedSummary").textContent = "";
       document.getElementById("selectedQuestion").textContent = "";
-      attendeePanel.innerHTML = `<div class="people-grid">${cohort.attendees.map((person, i) => `<button class="person" type="button" data-person-index="${i}"><div class="portrait" style="${portraitStyle(person.name)}"></div><strong>${person.name}</strong><span><i class="field-dot" style="--dot:${fieldColors[person.field]}"></i>${person.field}</span><span>${person.institution}</span></button>`).join("")}</div>`;
+      attendeeTab.textContent = `${cohort.attendees.length} attendees`;
+      speakerTab.textContent = `${cohort.speakers.length} speakers`;
+      attendeePanel.innerHTML = `<div class="people-grid">${cohort.attendees.map((person, i) => attendeeCard(person, i)).join("")}</div>`;
       speakerPanel.innerHTML = `<div class="speaker-grid">${cohort.speakers.map((speaker, i) => `<button class="speaker" type="button" data-speaker-index="${i}"><div class="portrait" style="${portraitStyle(speaker.name)}"></div><span class="speaker-index">Speaker 0${i + 1}</span><strong>${speaker.name}</strong><span>${speaker.title} · ${speaker.institution}</span><p>${speaker.session}</p></button>`).join("")}</div>`;
       attendeePanel.querySelectorAll("[data-person-index]").forEach(button => button.addEventListener("click", () => openProfile(cohort.attendees[Number(button.dataset.personIndex)], "Attendee")));
       speakerPanel.querySelectorAll("[data-speaker-index]").forEach(button => button.addEventListener("click", () => openProfile(cohort.speakers[Number(button.dataset.speakerIndex)], "Speaker")));
@@ -586,15 +601,21 @@
     }
 
     function openProfile(person, type) {
-      const hasPhoto = currentCohort.year > 2010;
+      const hasPhoto = type === "Speaker" ? currentCohort.year > 2010 : currentCohort.year > 2010 && !person.noPhoto;
       profileDialog.classList.toggle("no-photos", !hasPhoto);
       document.getElementById("profilePortrait").setAttribute("style", hasPhoto ? portraitStyle(person.name) : "");
       document.getElementById("profileConference").textContent = `${currentCohort.month} ${currentCohort.year} · ${type}`;
       document.getElementById("profileName").textContent = person.name;
-      document.getElementById("profileRole").textContent = `${person.nowRole} at ${person.nowOrg}`;
-      document.getElementById("profileMeta").textContent = `${person.nowCity} · ${type === "Speaker" ? person.title : "Studied " + person.field}`;
-      const focus = type === "Speaker" ? `Their ${currentCohort.year} session explored “${person.session}”.` : `Their original field was ${person.field} at ${person.institution}.`;
-      document.getElementById("profileBio").textContent = `${person.name} now works across policy, ideas and public life from ${person.nowCity}. ${focus} This present-day profile is simulated for the anniversary concept.`;
+      if (person.isReal) {
+        document.getElementById("profileRole").textContent = person.status || "Alumni";
+        document.getElementById("profileMeta").textContent = person.state ? `State: ${person.state}` : "State not supplied";
+        document.getElementById("profileBio").textContent = `This record is drawn from the supplied alumni data for ${currentCohort.month} ${currentCohort.year}. Contact details are not shown on the public site.`;
+      } else {
+        document.getElementById("profileRole").textContent = `${person.nowRole} at ${person.nowOrg}`;
+        document.getElementById("profileMeta").textContent = `${person.nowCity} · ${type === "Speaker" ? person.title : "Studied " + person.field}`;
+        const focus = type === "Speaker" ? `Their ${currentCohort.year} session explored “${person.session}”.` : `Their original field was ${person.field} at ${person.institution}.`;
+        document.getElementById("profileBio").textContent = `${person.name} now works across policy, ideas and public life from ${person.nowCity}. ${focus} This present-day profile is simulated for the anniversary concept.`;
+      }
       profileDialog.showModal();
     }
 
