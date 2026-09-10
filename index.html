@@ -86,8 +86,6 @@
       padding: 0 18px;
     }
     .timeline-note { margin: 36px 18px 0; color: var(--muted); font-size: 11px; text-align: right; }
-    .double-key { display: inline-grid; grid-template-columns: repeat(2, 7px); gap: 2px; margin-right: 6px; vertical-align: 1px; }
-    .double-key i { width: 7px; height: 7px; border: 1px solid var(--forest); border-radius: 50%; }
     .timeline::before {
       content: "";
       position: absolute;
@@ -132,17 +130,6 @@
       background: var(--coral);
       box-shadow: 0 0 0 6px rgba(238,112,92,.15);
     }
-    .year-node.multi::after {
-      content: "";
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--paper);
-      border: 2px solid var(--forest);
-      transform: translate(8px, -8px);
-    }
-    .year-node.multi.active::after { background: var(--forest-2); }
     .year-label {
       position: absolute;
       top: 55px;
@@ -291,11 +278,6 @@
       padding-left: 70px;
     }
     body.vertical-layout .year-node::before { position: relative; flex: 0 0 auto; }
-    body.vertical-layout .year-node.multi::after {
-      left: 79px;
-      top: 13px;
-      transform: none;
-    }
     body.vertical-layout .year-label,
     body.vertical-layout .year-node:nth-child(5n + 1) .year-label,
     body.vertical-layout .year-node:first-child .year-label,
@@ -306,8 +288,7 @@
       color: var(--ink);
       font-size: 14px;
     }
-    body.vertical-layout .year-node.multi .year-label::after { content: none; }
-    body.vertical-layout .timeline-note { max-width: 270px; margin: 22px 0 0 102px; text-align: left; }
+    body.vertical-layout .timeline-note { display: none; }
   </style>
   <link rel="stylesheet" href="refinement.css">
 </head>
@@ -328,7 +309,6 @@
 
     <section class="timeline-shell" aria-label="Conference timeline">
       <div class="timeline" id="timeline" role="group" aria-label="Conference years"></div>
-      <p class="timeline-note"><span class="double-key" aria-hidden="true"><i></i><i></i></span>Extra marker = multiple cohorts. Choose the month after opening the year.</p>
     </section>
 
     <section class="detail-tab" id="detailTab" aria-live="polite" aria-label="Selected year details">
@@ -522,7 +502,7 @@
       const cohort = yearCohorts[0];
       const button = document.createElement("button");
       button.type = "button";
-      button.className = `year-node${yearCohorts.length > 1 ? " multi" : ""}`;
+      button.className = "year-node";
       button.dataset.year = year;
       button.setAttribute("aria-controls", "detailTab");
       button.setAttribute("aria-label", `Open ${year}: ${yearCohorts.length === 1 ? "1 cohort" : yearCohorts.length + " cohorts, month choices shown in the detail panel"}`);
