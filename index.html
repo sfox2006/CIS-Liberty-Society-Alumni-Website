@@ -225,6 +225,10 @@
     .profile-role { margin: 8px 42px 0 0; font-weight: 800; line-height: 1.4; }
     .profile-meta { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
     .profile-bio { margin: 25px 0 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); line-height: 1.65; }
+    .profile-link-row { margin: 20px 0 0; }
+    .profile-link-row[hidden] { display: none; }
+    .profile-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid rgba(0,101,92,.22); border-radius: 999px; color: var(--forest); background: var(--wash); font-size: 13px; font-weight: 800; text-decoration: none; }
+    .profile-link:hover { border-color: var(--forest); background: white; box-shadow: 0 8px 22px rgba(0,55,49,.08); }
     .profile-close { position: absolute; right: 18px; top: 18px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; font-size: 19px; }
     .profile-close:hover { color: white; background: var(--forest); }
 
@@ -369,6 +373,7 @@
         <p class="profile-role" id="profileRole"></p>
         <p class="profile-meta" id="profileMeta"></p>
         <p class="profile-bio" id="profileBio"></p>
+        <p class="profile-link-row" id="profileLinkedInRow" hidden><a class="profile-link" id="profileLinkedIn" href="#" target="_blank" rel="noopener noreferrer">View LinkedIn profile ↗</a></p>
       </div>
     </div>
   </dialog>
@@ -376,7 +381,7 @@
 
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
-  <script src="real-attendees.js"></script>
+  <script src="real-attendees.js?v=linkedin-20260910"></script>
   <script>
     const verticalLayout = true;
     if (verticalLayout) {
@@ -615,6 +620,15 @@
         document.getElementById("profileMeta").textContent = `${person.nowCity} · ${type === "Speaker" ? person.title : "Studied " + person.field}`;
         const focus = type === "Speaker" ? `Their ${currentCohort.year} session explored “${person.session}”.` : `Their original field was ${person.field} at ${person.institution}.`;
         document.getElementById("profileBio").textContent = `${person.name} now works across policy, ideas and public life from ${person.nowCity}. ${focus} This present-day profile is simulated for the anniversary concept.`;
+      }
+      const linkedInRow = document.getElementById("profileLinkedInRow");
+      const linkedInLink = document.getElementById("profileLinkedIn");
+      if (person.linkedin) {
+        linkedInLink.href = person.linkedin;
+        linkedInRow.hidden = false;
+      } else {
+        linkedInLink.removeAttribute("href");
+        linkedInRow.hidden = true;
       }
       profileDialog.showModal();
     }
