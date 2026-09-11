@@ -481,7 +481,7 @@
       </div>
       <p class="form-error" id="bioFormMessage" aria-live="polite"></p>
       <div class="form-actions">
-        <button class="secondary-action" id="copyBioSubmission" type="button">Copy submission</button>
+        <button class="secondary-action" id="copyBioSubmission" type="button">Copy spreadsheet row</button>
         <button class="primary-action" type="submit">Send to CIS</button>
       </div>
     </form>
@@ -490,7 +490,7 @@
 
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
-  <script src="real-attendees.js?v=bio-form-20260911"></script>
+  <script src="real-attendees.js?v=bio-register-20260911"></script>
   <script>
     const verticalLayout = true;
     if (verticalLayout) {
@@ -785,6 +785,7 @@
 
     function bioSubmissionText() {
       const data = new FormData(bioForm);
+      const spreadsheetRow = bioSpreadsheetRow(data);
       return [
         "Liberty & Society alumni bio submission",
         "",
@@ -796,8 +797,30 @@
         `LinkedIn: ${data.get("linkedin") || "Not supplied"}`,
         "",
         "Bio:",
-        data.get("bio")
+        data.get("bio"),
+        "",
+        "Spreadsheet row for CIS register (paste into columns B:K):",
+        spreadsheetRow
       ].join("\n");
+    }
+
+    function cleanSpreadsheetCell(value) {
+      return String(value || "").replace(/\s*\n+\s*/g, " ").replace(/\t/g, " ").trim();
+    }
+
+    function bioSpreadsheetRow(data = new FormData(bioForm)) {
+      return [
+        new Date().toISOString().slice(0, 10),
+        "New",
+        "Not uploaded",
+        data.get("name"),
+        data.get("year"),
+        data.get("month") || "",
+        data.get("email"),
+        data.get("phone"),
+        data.get("linkedin") || "",
+        data.get("bio")
+      ].map(cleanSpreadsheetCell).join("\t");
     }
 
     function validateBioForm() {
@@ -821,8 +844,8 @@
       if (!validateBioForm()) return;
       const message = document.getElementById("bioFormMessage");
       try {
-        await navigator.clipboard.writeText(bioSubmissionText());
-        message.textContent = "Submission copied. You can paste it into an email to CIS.";
+        await navigator.clipboard.writeText(bioSpreadsheetRow());
+        message.textContent = "Spreadsheet row copied. Paste it into the register starting at the Received date column.";
       } catch {
         message.textContent = "Copy did not work in this browser. Please use Send to CIS instead.";
       }
