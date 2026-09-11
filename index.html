@@ -18,6 +18,7 @@
       --muted: #555555;
       --line: #e1e1e1;
       --shadow: 0 18px 50px rgba(0, 55, 49, .09);
+      --wash: #edf5f3;
     }
 
     * { box-sizing: border-box; }
@@ -59,6 +60,12 @@
     .kicker { margin: 0 0 18px; color: var(--forest); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
     h1 { margin: 0; max-width: 980px; color: var(--forest); font: 600 clamp(3.2rem, 7vw, 7.2rem)/.9 Georgia, "Times New Roman", serif; letter-spacing: -.065em; }
     .intro { margin: 25px 0 0; max-width: 690px; color: var(--muted); font-size: clamp(16px, 1.6vw, 21px); line-height: 1.55; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 28px; }
+    .primary-action, .secondary-action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 11px 18px; border-radius: 999px; cursor: pointer; font-weight: 800; text-decoration: none; }
+    .primary-action { border: 1px solid var(--forest); color: white; background: var(--forest); box-shadow: 0 12px 28px rgba(0, 104, 95, .18); }
+    .primary-action:hover { background: var(--forest-2); border-color: var(--forest-2); }
+    .secondary-action { border: 1px solid rgba(0,104,95,.22); color: var(--forest); background: var(--wash); }
+    .secondary-action:hover { border-color: var(--forest); background: white; }
     .hero::after { content: ""; display: block; width: 100%; height: 18px; margin-top: 46px; border-radius: 18px 0 18px 0; background: var(--forest); }
 
     main { padding: 76px clamp(16px, 5vw, 74px) 100px; }
@@ -229,8 +236,39 @@
     .profile-link-row[hidden] { display: none; }
     .profile-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1px solid rgba(0,101,92,.22); border-radius: 999px; color: var(--forest); background: var(--wash); font-size: 13px; font-weight: 800; text-decoration: none; }
     .profile-link:hover { border-color: var(--forest); background: white; box-shadow: 0 8px 22px rgba(0,55,49,.08); }
+    .profile-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .profile-actions .secondary-action { min-height: 40px; padding: 9px 13px; font-size: 13px; }
     .profile-close { position: absolute; right: 18px; top: 18px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; font-size: 19px; }
     .profile-close:hover { color: white; background: var(--forest); }
+
+    .bio-dialog { width: min(760px, calc(100% - 28px)); border: 0; border-radius: 18px; padding: 0; box-shadow: 0 28px 90px rgba(0,0,0,.28); }
+    .bio-dialog::backdrop { background: rgba(0,35,31,.55); backdrop-filter: blur(3px); }
+    .bio-form { display: grid; gap: 18px; padding: clamp(24px, 4vw, 40px); }
+    .bio-form header { padding: 0; overflow: visible; }
+    .bio-form header::after { display: none; }
+    .bio-form h2 { margin: 0; color: var(--forest); font: 500 clamp(2rem, 4vw, 3rem)/1.05 Georgia, serif; letter-spacing: -.04em; }
+    .bio-form .form-intro { margin: 10px 0 0; color: var(--muted); line-height: 1.55; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .form-field { display: grid; gap: 7px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field label { color: var(--ink); font-size: 14px; font-weight: 800; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 13px;
+      color: var(--ink);
+      background: white;
+      font: inherit;
+    }
+    .form-field textarea { min-height: 170px; resize: vertical; line-height: 1.55; }
+    .form-help { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .word-count { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
+    .word-count strong { color: var(--forest); }
+    .form-error { min-height: 20px; margin: 0; color: #9b1c1c; font-size: 13px; font-weight: 750; }
+    .form-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+    .bio-close { position: absolute; right: 16px; top: 16px; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; font-size: 19px; }
+    .bio-close:hover { color: white; background: var(--forest); }
 
     footer { max-width: 1460px; margin: auto; padding: 0 clamp(20px, 5vw, 74px) 44px; color: var(--muted); font-size: 11px; }
 
@@ -253,6 +291,9 @@
       .profile-layout { grid-template-columns: 1fr; }
       .profile-visual { display: grid; grid-template-columns: 120px 1fr; gap: 18px; align-items: end; }
       .profile-visual span { margin: 0; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-actions { justify-content: stretch; }
+      .form-actions button { width: 100%; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
@@ -321,6 +362,10 @@
       <p class="kicker">1996—2026 · 30 years</p>
       <h1>Thirty years.<br>Countless conversations.</h1>
       <p class="intro">Explore the people and ideas of Liberty &amp; Society, one cohort at a time.</p>
+      <div class="hero-actions">
+        <button class="primary-action" id="openBioForm" type="button">Submit your alumni bio</button>
+        <span class="form-help">For alumni who want to add or update a 100–150 word profile.</span>
+      </div>
     </div>
   </header>
 
@@ -374,14 +419,78 @@
         <p class="profile-meta" id="profileMeta"></p>
         <p class="profile-bio" id="profileBio"></p>
         <p class="profile-link-row" id="profileLinkedInRow" hidden><a class="profile-link" id="profileLinkedIn" href="#" target="_blank" rel="noopener noreferrer">View LinkedIn profile ↗</a></p>
+        <div class="profile-actions">
+          <button class="secondary-action" id="profileBioSubmit" type="button">Submit or update bio</button>
+        </div>
       </div>
     </div>
+  </dialog>
+
+  <dialog class="bio-dialog" id="bioDialog" aria-labelledby="bioDialogTitle">
+    <form class="bio-form" id="bioForm" method="dialog">
+      <button class="bio-close" id="bioClose" type="button" aria-label="Close bio form">×</button>
+      <header>
+        <p class="kicker">Alumni contribution</p>
+        <h2 id="bioDialogTitle">Submit your Liberty &amp; Society bio</h2>
+        <p class="form-intro">Send CIS your current details and a short bio for review. Contact details are for follow-up only and are not shown publicly on this website.</p>
+      </header>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="bioName">Full name</label>
+          <input id="bioName" name="name" autocomplete="name" required>
+        </div>
+        <div class="form-field">
+          <label for="bioYear">Cohort year</label>
+          <input id="bioYear" name="year" inputmode="numeric" pattern="[0-9]{4}" placeholder="e.g. 2026" required>
+        </div>
+        <div class="form-field">
+          <label for="bioMonth">Cohort month, if known</label>
+          <select id="bioMonth" name="month">
+            <option value="">Not sure / not applicable</option>
+            <option>January</option>
+            <option>February</option>
+            <option>March</option>
+            <option>April</option>
+            <option>May</option>
+            <option>June</option>
+            <option>July</option>
+            <option>August</option>
+            <option>September</option>
+            <option>October</option>
+            <option>November</option>
+            <option>December</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="bioEmail">Email</label>
+          <input id="bioEmail" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="form-field">
+          <label for="bioPhone">Phone</label>
+          <input id="bioPhone" name="phone" type="tel" autocomplete="tel" required>
+        </div>
+        <div class="form-field">
+          <label for="bioLinkedIn">LinkedIn profile, optional</label>
+          <input id="bioLinkedIn" name="linkedin" type="url" placeholder="https://www.linkedin.com/in/...">
+        </div>
+        <div class="form-field full">
+          <label for="bioText">Bio</label>
+          <textarea id="bioText" name="bio" required placeholder="Tell us what you do now, what you studied or work on, and any connection you want to share with Liberty & Society."></textarea>
+          <div class="word-count"><span><strong id="bioWordCount">0</strong> words</span><span>Target: 100–150 words</span></div>
+        </div>
+      </div>
+      <p class="form-error" id="bioFormMessage" aria-live="polite"></p>
+      <div class="form-actions">
+        <button class="secondary-action" id="copyBioSubmission" type="button">Copy submission</button>
+        <button class="primary-action" type="submit">Send to CIS</button>
+      </div>
+    </form>
   </dialog>
   <footer>Source-backed month/year schedule · Real attendee names shown for 2021–2026 where supplied. The 2026 website cohort shows conference attendees only. Contact details are not published.</footer>
 
   <script src="embed.js"></script>
   <script src="portrait-data.js"></script>
-  <script src="real-attendees.js?v=linkedin-corrections-20260910"></script>
+  <script src="real-attendees.js?v=bio-form-20260911"></script>
   <script>
     const verticalLayout = true;
     if (verticalLayout) {
@@ -521,8 +630,12 @@
     const cohortPicker = document.getElementById("cohortPicker");
     const cohortOptions = document.getElementById("cohortOptions");
     const profileDialog = document.getElementById("profileDialog");
+    const bioDialog = document.getElementById("bioDialog");
+    const bioForm = document.getElementById("bioForm");
+    const bioSubmissionEmail = "cis@cis.org.au";
     let selectedYear = null;
     let currentCohort = null;
+    let activeProfilePrefill = null;
 
     years.forEach(year => {
       const yearCohorts = cohorts.filter(c => c.year === year);
@@ -630,11 +743,99 @@
         linkedInLink.removeAttribute("href");
         linkedInRow.hidden = true;
       }
+      activeProfilePrefill = {
+        name: person.name || "",
+        year: String(currentCohort.year || ""),
+        month: currentCohort.month || "",
+        linkedin: person.linkedin || ""
+      };
       profileDialog.showModal();
     }
 
     document.getElementById("profileClose").addEventListener("click", () => profileDialog.close());
     profileDialog.addEventListener("click", event => { if (event.target === profileDialog) profileDialog.close(); });
+    document.getElementById("profileBioSubmit").addEventListener("click", () => {
+      profileDialog.close();
+      openBioForm(activeProfilePrefill);
+    });
+
+    function bioWordTotal() {
+      return document.getElementById("bioText").value.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function updateBioWordCount() {
+      const count = bioWordTotal();
+      const wordCount = document.getElementById("bioWordCount");
+      wordCount.textContent = count;
+      wordCount.style.color = count === 0 || (count >= 100 && count <= 150) ? "var(--forest)" : "#9b1c1c";
+      return count;
+    }
+
+    function openBioForm(prefill = {}) {
+      bioForm.reset();
+      document.getElementById("bioFormMessage").textContent = "";
+      document.getElementById("bioName").value = prefill?.name || "";
+      document.getElementById("bioYear").value = prefill?.year || "";
+      document.getElementById("bioMonth").value = prefill?.month || "";
+      document.getElementById("bioLinkedIn").value = prefill?.linkedin || "";
+      updateBioWordCount();
+      bioDialog.showModal();
+      document.getElementById(prefill?.name ? "bioEmail" : "bioName").focus();
+    }
+
+    function bioSubmissionText() {
+      const data = new FormData(bioForm);
+      return [
+        "Liberty & Society alumni bio submission",
+        "",
+        `Name: ${data.get("name")}`,
+        `Cohort year: ${data.get("year")}`,
+        `Cohort month: ${data.get("month") || "Not supplied"}`,
+        `Email: ${data.get("email")}`,
+        `Phone: ${data.get("phone")}`,
+        `LinkedIn: ${data.get("linkedin") || "Not supplied"}`,
+        "",
+        "Bio:",
+        data.get("bio")
+      ].join("\n");
+    }
+
+    function validateBioForm() {
+      const message = document.getElementById("bioFormMessage");
+      const count = updateBioWordCount();
+      if (!bioForm.reportValidity()) return false;
+      if (count < 100 || count > 150) {
+        message.textContent = `Please keep the bio between 100 and 150 words. It is currently ${count} words.`;
+        document.getElementById("bioText").focus();
+        return false;
+      }
+      message.textContent = "";
+      return true;
+    }
+
+    document.getElementById("openBioForm").addEventListener("click", () => openBioForm());
+    document.getElementById("bioClose").addEventListener("click", () => bioDialog.close());
+    bioDialog.addEventListener("click", event => { if (event.target === bioDialog) bioDialog.close(); });
+    document.getElementById("bioText").addEventListener("input", updateBioWordCount);
+    document.getElementById("copyBioSubmission").addEventListener("click", async () => {
+      if (!validateBioForm()) return;
+      const message = document.getElementById("bioFormMessage");
+      try {
+        await navigator.clipboard.writeText(bioSubmissionText());
+        message.textContent = "Submission copied. You can paste it into an email to CIS.";
+      } catch {
+        message.textContent = "Copy did not work in this browser. Please use Send to CIS instead.";
+      }
+    });
+    bioForm.addEventListener("submit", event => {
+      event.preventDefault();
+      if (!validateBioForm()) return;
+      const name = document.getElementById("bioName").value.trim();
+      const subject = `Liberty & Society alumni bio submission - ${name}`;
+      const mailto = `mailto:${bioSubmissionEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bioSubmissionText())}`;
+      document.getElementById("bioFormMessage").textContent = "Opening an email draft. Please review and send it from your email app.";
+      window.location.href = mailto;
+    });
 
     function selectTab(tab) {
       const attendees = tab === "attendees";
